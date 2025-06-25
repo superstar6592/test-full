@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+    env: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend
+      env: dev
+  template:
+    metadata:
+      labels:
+        app: backend
+        env: dev
+    spec:
+      containers:
+        - name: backend
+          image: abinashaitech/freelance-backend-image:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          env:
+            - name: NODE_ENV
+              value: "development"
+          envFrom:
+            - secretRef:
+                name: firebase-secret
+      volumes:
+        - name: firebase-creds
+          secret:
+            secretName: firebase-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+    env: dev
+  ports:
+    - protocol: TCP
+      port: 80            
+      targetPort: 8000   
+      nodePort: 31001     
+  type: NodePort 

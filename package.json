@@ -1,0 +1,10 @@
+{
+  "name": "freelance-monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm --prefix backend start\" \"npm --prefix frontend run dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
